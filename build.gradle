@@ -41,8 +41,8 @@ dependencies {
     // In-memory DB for testing
     runtimeOnly    'com.h2database:h2'
 
-    // MySQL 드라이버
-    runtimeOnly    'mysql:mysql-connector-java'
+    // MySQL 드라이버 (Spring Boot 관리 버전)
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
