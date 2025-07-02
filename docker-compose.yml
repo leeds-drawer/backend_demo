@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: community-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: community_db
+      MYSQL_USER: community
+      MYSQL_PASSWORD: pass1
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: community-app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/community_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: community
+      SPRING_DATASOURCE_PASSWORD: pass1
+    ports:
+      - "8080:8080"
+    command: ["./gradlew", "bootRun"]
+
+volumes:
+  db_data:
