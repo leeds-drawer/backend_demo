@@ -1,28 +1,33 @@
 package com.community.community.domain;
 
-import lombok.*;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import lombok.*;
 
-@Entity
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Post {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Entity                 // ← 추상 클래스가 아니라 일반 엔티티
+@Getter @Setter @NoArgsConstructor
+public class Post extends BaseTimeEntity {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User author; // 작성자 (User 참조)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User author;
 
-    @Column(nullable = false)
-    private String title; // 글 제목
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 32)
+    private PostCategory category;          // CODING_TEST / TECH_INTERVIEW
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String content; // 글 내용
+    /* Coding-Test 전용(면접 후기는 null) */
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Problem problem;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now(); // 작성 시각
+    /* 공통 필드 */
+    @Column(nullable = false, length = 200)
+    private String title;
+
+    @Lob               // 해설 코드
+    private String code;
+
+    @Lob               // 해설·후기 본문
+    private String explanation;
 }
