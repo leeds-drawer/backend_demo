@@ -10,6 +10,8 @@ import com.community.community.repository.PostRepository;
 import com.community.community.repository.UserRepository;
 import com.community.community.service.LevelService;
 import org.springframework.web.bind.annotation.*;
+import com.community.community.repository.PostRepository; // ← 추가
+
 
 import java.security.Principal;
 
