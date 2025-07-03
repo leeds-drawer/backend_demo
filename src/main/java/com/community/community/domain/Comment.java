@@ -1,26 +1,32 @@
+// src/main/java/com/community/community/domain/Comment.java
 package com.community.community.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Entity @Getter @Setter
-public class Comment extends BaseTimeEntity {
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Setter               // ★ 없으면 반드시 추가
+@NoArgsConstructor
+@AllArgsConstructor
+public class Comment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
-    private ParentType parentType;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "post_id")
+    private Post post;          // 대상 게시글
 
-    @Column(nullable = false)
-    private Long parentId;               // 게시글 PK
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
-    private User author;
+    private User author;        // 댓글 작성자
 
-    @Lob @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 }
