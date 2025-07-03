@@ -18,7 +18,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
         
-        // 🚀 JWT 필터 임시 비활성화 - 모든 요청 통과
+        // 🚀 완전 비활성화 - 아무것도 하지 않고 통과
         filterChain.doFilter(request, response);
     }
 }
