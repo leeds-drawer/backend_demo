@@ -12,6 +12,8 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - app-network
 
   app:
     build: .
@@ -22,11 +24,22 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/community_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: community
       SPRING_DATASOURCE_PASSWORD: pass1
+      # Spring Security 설정 추가
+      SPRING_SECURITY_FILTER_ORDER: -100
+      SPRING_SECURITY_DEBUG: "true"
+      # Servlet 오류 관련 설정
+      SERVER_ERROR_INCLUDE_STACKTRACE: "always"
+      SERVER_ERROR_WHITELABEL_ENABLED: "true"
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: "DEBUG"
     ports:
       - "8080:8080"
-    # 개발 중엔 bootRun으로 바로 띄워도 되지만, 
-    # 패키징 후 운영 환경에는 아래 ENTRYPOINT 방식을 권장합니다.
-    command: ["./gradlew", "bootRun"]
+    restart: always
+    networks:
+      - app-network
 
 volumes:
   db_data:
+
+networks:
+  app-network:
+    driver: bridge
