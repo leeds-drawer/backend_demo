@@ -1,30 +1,18 @@
+// ────────────────── domain/Question.java ──────────────────
 package com.community.community.domain;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Entity @Getter @Setter
-@Table(indexes = @Index(columnList = "problemNo"))
+@Entity @Getter @Setter @NoArgsConstructor
 public class Question extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User author;
+    @ManyToOne(optional = false) private User    author;
+    @ManyToOne(optional = false) private Problem problem;
 
-    @Column(nullable = false)
-    private int problemNo;
-
-    @Column(nullable = false)
-    private String title;
-
-    @Lob @Column(nullable = false)
-    private String contentHtml;
-
-    @Column(nullable = false) private int cmntCnt = 0;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String content;
 }
