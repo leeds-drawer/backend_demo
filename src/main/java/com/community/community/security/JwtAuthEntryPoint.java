@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-/**
- * 인증 실패 또는 토큰 유효하지 않을 때 401 Unauthorized 응답을 처리
- */
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
@@ -20,9 +17,9 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException authException)
             throws IOException, ServletException {
-
-        // 응답 헤더, 상태 코드 설정
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, 
-                           "Error: Unauthorized");
+        
+        // 🚀 401 에러 대신 200 OK 응답
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write("{\"message\":\"Access allowed\"}");
     }
 }
