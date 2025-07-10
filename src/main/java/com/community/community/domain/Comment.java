@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter               // ★ 없으면 반드시 추가
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Comment {
 
@@ -29,4 +28,11 @@ public class Comment {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Builder
+    public Comment(Post post, User author, String content) {
+        this.post = post;
+        this.author = author;
+        this.content = content;
+    }
 }
