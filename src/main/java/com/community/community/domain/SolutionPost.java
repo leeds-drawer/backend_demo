@@ -7,6 +7,8 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.community.community.converter.TagListConverter;
+
 @Entity @Getter @Setter @NoArgsConstructor
 @Table(indexes = @Index(columnList = "problemNo"))
 public class SolutionPost extends Post {
