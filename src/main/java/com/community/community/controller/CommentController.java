@@ -10,8 +10,6 @@ import com.community.community.repository.PostRepository;
 import com.community.community.repository.UserRepository;
 import com.community.community.service.LevelService;
 import org.springframework.web.bind.annotation.*;
-import com.community.community.repository.PostRepository; // ← 추가
-
 
 import java.security.Principal;
 
@@ -38,11 +36,14 @@ public class CommentController {
     public CommentResponseDto add(@PathVariable Long postId,
                                   @RequestBody CommentRequestDto dto,
                                   Principal principal) {
-        Post p = postRepo.findById(postId).orElseThrow();
-        User u = userRepo.findByUsername(principal.getName()).orElseThrow();
+        Post p = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        User u = userRepo.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        Comment c = new Comment();
-        c.setPost(p); c.setAuthor(u); c.setContent(dto.getContent());
+        Comment c = Comment.builder()
+                .post(p)
+                .author(u)
+                .content(dto.getContent())
+                .build();
         Comment saved = commentRepo.save(c);
 
         // 댓글 1개 = EXP 2
