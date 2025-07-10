@@ -44,7 +44,7 @@ public class PostController {
     public PostResponseDto create(@RequestBody PostRequestDto dto,
                                   Principal principal) {
 
-        User author = userRepo.findByUsername(principal.getName()).orElseThrow();
+        User author = userRepo.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
 
         // 카테고리별 추가 로직
         Problem problem = null;
@@ -56,13 +56,14 @@ public class PostController {
                                  .orElseGet(() -> problemRepo.save(new Problem(num)));
         }
 
-        Post post = new Post();
-        post.setAuthor(author);
-        post.setCategory(dto.getCategory());
-        post.setProblem(problem);
-        post.setTitle(dto.getTitle());
-        post.setCode(dto.getCode());
-        post.setExplanation(dto.getExplanation());
+        Post post = Post.builder()
+                .author(author)
+                .category(dto.getCategory())
+                .problem(problem)
+                .title(dto.getTitle())
+                .code(dto.getCode())
+                .explanation(dto.getExplanation())
+                .build();
         Post saved = postRepo.save(post);
 
         // 태그 처리
@@ -114,8 +115,8 @@ public class PostController {
     @PostMapping("/{postId}/like")
     public Map<String, Object> toggleLike(@PathVariable Long postId,
                                           Principal principal) {
-        Post post = postRepo.findById(postId).orElseThrow();
-        User user = userRepo.findByUsername(principal.getName()).orElseThrow();
+        Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        User user = userRepo.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
 
         likeRepo.findByPostAndUser(post, user).ifPresentOrElse(
             likeRepo::delete,
