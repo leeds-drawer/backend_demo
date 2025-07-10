@@ -3,8 +3,12 @@ package com.community.community.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
 @Entity                 // ← 추상 클래스가 아니라 일반 엔티티
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @Builder @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
