@@ -12,6 +12,7 @@ public class Level {
     @OneToOne(optional = false) @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(nullable = false)
     private long xp;                    // 누적 경험치
 
     public Level(User user) {           // ← ★추가
