@@ -4,7 +4,7 @@ package com.community.community.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity @Getter @Setter @NoArgsConstructor
+@Entity @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,7 +12,7 @@ public class Like {
     @ManyToOne(optional = false) private Post post;
     @ManyToOne(optional = false) private User user;
 
-    public Like(Post post, User user) {     // ← ★추가
+    public Like(Post post, User user) {
         this.post = post; this.user = user;
     }
 }
